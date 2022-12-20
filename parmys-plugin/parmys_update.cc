@@ -108,7 +108,7 @@ void update_design(Yosys::Design *design, netlist_t *netlist)
     gnd.append(to_wire("$false", module));
     module->connect(Yosys::RTLIL::SigSig(gnd, Yosys::RTLIL::State::S0));
 
-    for (long i = 0; i < netlist->num_top_input_nodes; i++) {
+    for (int i = 0; i < netlist->num_top_input_nodes; i++) {
         nnode_t *top_input_node = netlist->top_input_nodes[i];
         Yosys::RTLIL::Wire *wire = to_wire(top_input_node->name, module);
         wire->port_input = true;
@@ -120,7 +120,7 @@ void update_design(Yosys::Design *design, netlist_t *netlist)
         }
     }
 
-    for (long i = 0; i < netlist->num_top_output_nodes; i++) {
+    for (int i = 0; i < netlist->num_top_output_nodes; i++) {
         nnode_t *top_output_node = netlist->top_output_nodes[i];
         if (!top_output_node->input_pins[0]->net->num_driver_pins) {
             Yosys::log_warning("This output is undriven (%s) and will be removed\n", top_output_node->name);
@@ -139,7 +139,7 @@ void update_design(Yosys::Design *design, netlist_t *netlist)
     depth_first_traversal_to_design(100, module, netlist, design);
 
     /* connect all the outputs up to the last gate */
-    for (long i = 0; i < netlist->num_top_output_nodes; i++) {
+    for (int i = 0; i < netlist->num_top_output_nodes; i++) {
         nnode_t *node = netlist->top_output_nodes[i];
 
         if (node->input_pins[0]->net->num_fanout_pins > 0) {
@@ -202,8 +202,6 @@ void update_design(Yosys::Design *design, netlist_t *netlist)
 
 void depth_first_traversal_to_design(short marker_value, Yosys::Module *module, netlist_t *netlist, Yosys::Design *design)
 {
-    int i;
-
     if (!coarsen_cleanup) {
         netlist->gnd_node->name = vtr::strdup("$false");
         netlist->vcc_node->name = vtr::strdup("$true");
@@ -214,7 +212,7 @@ void depth_first_traversal_to_design(short marker_value, Yosys::Module *module, 
     depth_traverse_update_design(netlist->vcc_node, marker_value, module, netlist, design);
     depth_traverse_update_design(netlist->pad_node, marker_value, module, netlist, design);
 
-    for (i = 0; i < netlist->num_top_input_nodes; i++) {
+    for (int i = 0; i < netlist->num_top_input_nodes; i++) {
         if (netlist->top_input_nodes[i] != NULL) {
             depth_traverse_update_design(netlist->top_input_nodes[i], marker_value, module, netlist, design);
         }
@@ -223,7 +221,6 @@ void depth_first_traversal_to_design(short marker_value, Yosys::Module *module, 
 
 void depth_traverse_update_design(nnode_t *node, uintptr_t traverse_mark_number, Yosys::Module *module, netlist_t *netlist, Yosys::Design *design)
 {
-    int i, j;
     nnode_t *next_node;
     nnet_t *next_net;
 
@@ -234,12 +231,12 @@ void depth_traverse_update_design(nnode_t *node, uintptr_t traverse_mark_number,
 
         node->traverse_visited = traverse_mark_number;
 
-        for (i = 0; i < node->num_output_pins; i++) {
+        for (int i = 0; i < node->num_output_pins; i++) {
             if (node->output_pins[i]->net == NULL)
                 continue;
 
             next_net = node->output_pins[i]->net;
-            for (j = 0; j < next_net->num_fanout_pins; j++) {
+            for (int j = 0; j < next_net->num_fanout_pins; j++) {
                 if (next_net->fanout_pins[j] == NULL)
                     continue;
 

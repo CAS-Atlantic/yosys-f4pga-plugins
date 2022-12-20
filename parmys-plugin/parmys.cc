@@ -29,8 +29,6 @@
 #include "vtr_path.h"
 #include "vtr_util.h"
 
-#include "netlist_check.h"
-
 #include "partial_map.h"
 
 #include "netlist_visualizer.h"
@@ -71,24 +69,25 @@ struct ParMYSPass : public Pass {
 
     static void hook_up_nets(netlist_t *odin_netlist, Hashtable *output_nets_hash)
     {
-        nnode_t **node_sets[] = {odin_netlist->internal_nodes, odin_netlist->ff_nodes, odin_netlist->top_output_nodes};
-        int counts[] = {odin_netlist->num_internal_nodes, odin_netlist->num_ff_nodes, odin_netlist->num_top_output_nodes};
-        int num_sets = 3;
+        for (int i=0; i<odin_netlist->num_internal_nodes; i++) {
+            nnode_t *node = odin_netlist->internal_nodes[i];
+            hook_up_node(node, output_nets_hash);
+        }
 
-        int i;
-        for (i = 0; i < num_sets; i++) {
-            int j;
-            for (j = 0; j < counts[i]; j++) {
-                nnode_t *node = node_sets[i][j];
-                hook_up_node(node, output_nets_hash);
-            }
+        for (int i=0; i<odin_netlist->num_ff_nodes; i++) {
+            nnode_t *node = odin_netlist->ff_nodes[i];
+            hook_up_node(node, output_nets_hash);
+        }
+
+        for (int i=0; i<odin_netlist->num_top_output_nodes; i++) {
+            nnode_t *node = odin_netlist->top_output_nodes[i];
+            hook_up_node(node, output_nets_hash);
         }
     }
 
     static void hook_up_node(nnode_t *node, Hashtable *output_nets_hash)
     {
-        int j;
-        for (j = 0; j < node->num_input_pins; j++) {
+        for (int j = 0; j < node->num_input_pins; j++) {
             npin_t *input_pin = node->input_pins[j];
 
             nnet_t *output_net = (nnet_t *)output_nets_hash->get(input_pin->name);
