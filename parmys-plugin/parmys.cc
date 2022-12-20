@@ -92,8 +92,9 @@ struct ParMYSPass : public Pass {
 
             nnet_t *output_net = (nnet_t *)output_nets_hash->get(input_pin->name);
 
-            if (!output_net)
+            if (!output_net) {
                 log_error("Error: Could not hook up the pin %s: not available, related node: %s.", input_pin->name, node->name);
+            }
             add_fanout_pin_to_net(output_net, input_pin);
         }
     }
@@ -299,7 +300,7 @@ struct ParMYSPass : public Pass {
         }
     }
 
-    static operation_list from_yosys_type(Yosys::RTLIL::IdString type)
+    static operation_list from_yosys_type(RTLIL::IdString type)
     {
         if (type == ID($add)) {
             return ADD;
@@ -341,7 +342,7 @@ struct ParMYSPass : public Pass {
             return DPRAM;
         }
 
-        if (Yosys::RTLIL::builtin_ff_cell_types().count(type)) {
+        if (RTLIL::builtin_ff_cell_types().count(type)) {
             return SKIP;
         }
 
@@ -368,10 +369,13 @@ struct ParMYSPass : public Pass {
 
         for (auto module : design->modules()) {
 
-            if (module->processes.size() != 0)
+            if (module->processes.size() != 0) {
                 log_error("Found unmapped processes in module %s: unmapped processes are not supported in parmys pass!\n", log_id(module->name));
-            if (module->memories.size() != 0)
+            }
+
+            if (module->memories.size() != 0) {
                 log_error("Found unmapped memories in module %s: unmapped memories are not supported in parmys pass!\n", log_id(module->name));
+            }
 
             if (module->name == RTLIL::escape_id(top_module_name)) {
                 top_module_name.clear();
@@ -425,7 +429,7 @@ struct ParMYSPass : public Pass {
             nnode_t *new_node = allocate_nnode(my_location);
 
             for (auto &param : cell->parameters) {
-                new_node->cell_parameters[Yosys::RTLIL::IdString(param.first)] = Yosys::Const(param.second);
+                new_node->cell_parameters[RTLIL::IdString(param.first)] = Const(param.second);
             }
 
             new_node->related_ast_node = NULL;
@@ -991,12 +995,15 @@ struct ParMYSPass : public Pass {
             Pass::call(design, "opt -full");
         }
 
-        if (design->top_module()->processes.size() != 0)
+        if (design->top_module()->processes.size() != 0) {
             log_error("Found unmapped processes in top module %s: unmapped processes are not supported in parmys pass!\n",
                       log_id(design->top_module()->name));
-        if (design->top_module()->memories.size() != 0)
+        }
+
+        if (design->top_module()->memories.size() != 0) {
             log_error("Found unmapped memories in module %s: unmapped memories are not supported in parmys pass!\n",
                       log_id(design->top_module()->name));
+        }
 
         design->sort();
 
@@ -1012,7 +1019,7 @@ struct ParMYSPass : public Pass {
 
                 bb.name = str(bb_module->name);
 
-                std::map<int, Yosys::RTLIL::Wire *> inputs, outputs;
+                std::map<int, RTLIL::Wire *> inputs, outputs;
 
                 for (auto wire : bb_module->wires()) {
                     if (wire->port_input)
@@ -1022,15 +1029,15 @@ struct ParMYSPass : public Pass {
                 }
 
                 for (auto &it : inputs) {
-                    Yosys::RTLIL::Wire *wire = it.second;
+                    RTLIL::Wire *wire = it.second;
                     for (int i = 0; i < wire->width; i++)
-                        bb.inputs.push_back(str(Yosys::RTLIL::SigSpec(wire, i)));
+                        bb.inputs.push_back(str(RTLIL::SigSpec(wire, i)));
                 }
 
                 for (auto &it : outputs) {
-                    Yosys::RTLIL::Wire *wire = it.second;
+                    RTLIL::Wire *wire = it.second;
                     for (int i = 0; i < wire->width; i++)
-                        bb.outputs.push_back(str(Yosys::RTLIL::SigSpec(wire, i)));
+                        bb.outputs.push_back(str(RTLIL::SigSpec(wire, i)));
                 }
 
                 black_boxes.push_back(bb);
@@ -1094,21 +1101,22 @@ struct ParMYSPass : public Pass {
         }
 
         for (auto bb_module : black_boxes) {
-            Yosys::Module *module = nullptr;
-            Yosys::hashlib::dict<Yosys::IdString, std::pair<int, bool>> wideports_cache;
+            Module *module = nullptr;
+            hashlib::dict<IdString, std::pair<int, bool>> wideports_cache;
 
-            module = new Yosys::Module;
+            module = new Module;
             module->name = RTLIL::escape_id(bb_module.name);
 
-            if (design->module(module->name))
-                log_error("Duplicate definition of module %s!\n", Yosys::log_id(module->name));
+            if (design->module(module->name)) {
+                log_error("Duplicate definition of module %s!\n", log_id(module->name));
+            }
 
             design->add(module);
 
             for (auto b_wire : bb_module.inputs) {
-                Yosys::RTLIL::Wire *wire = to_wire(b_wire, module);
+                RTLIL::Wire *wire = to_wire(b_wire, module);
                 wire->port_input = true;
-                std::pair<Yosys::RTLIL::IdString, int> wp = wideports_split(Yosys::RTLIL::unescape_id(b_wire));
+                std::pair<RTLIL::IdString, int> wp = wideports_split(RTLIL::unescape_id(b_wire));
                 if (!wp.first.empty() && wp.second >= 0) {
                     wideports_cache[wp.first].first = std::max(wideports_cache[wp.first].first, wp.second + 1);
                     wideports_cache[wp.first].second = true;
@@ -1116,9 +1124,9 @@ struct ParMYSPass : public Pass {
             }
 
             for (auto b_wire : bb_module.outputs) {
-                Yosys::RTLIL::Wire *wire = to_wire(Yosys::RTLIL::unescape_id(b_wire), module);
+                RTLIL::Wire *wire = to_wire(RTLIL::unescape_id(b_wire), module);
                 wire->port_output = true;
-                std::pair<Yosys::RTLIL::IdString, int> wp = wideports_split(Yosys::RTLIL::unescape_id(b_wire));
+                std::pair<RTLIL::IdString, int> wp = wideports_split(RTLIL::unescape_id(b_wire));
                 if (!wp.first.empty() && wp.second >= 0) {
                     wideports_cache[wp.first].first = std::max(wideports_cache[wp.first].first, wp.second + 1);
                     wideports_cache[wp.first].second = false;
@@ -1130,7 +1138,7 @@ struct ParMYSPass : public Pass {
             module->fixup_ports();
             wideports_cache.clear();
 
-            module->attributes[Yosys::ID::blackbox] = Yosys::RTLIL::Const(1);
+            module->attributes[ID::blackbox] = RTLIL::Const(1);
         }
 
         update_design(design, transformed);

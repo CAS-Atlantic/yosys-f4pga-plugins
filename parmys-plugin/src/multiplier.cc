@@ -196,7 +196,7 @@ void instantiate_simple_soft_multiplier(nnode_t *node, short mark, netlist_t *ne
     for (int i = 0; i < width; i++) {
         if (multiplicand_width == 1) {
             // this is undealt with
-            error_message(AST, node->loc, "%s", "Cannot create soft multiplier with multiplicand width of 1.\n");
+            error_message(RESOLVE, node->loc, "%s", "Cannot create soft multiplier with multiplicand width of 1.\n");
         } else if (i == 0) {
             /* IF - this is the LSbit, then we use a pass through from the partial product */
             remap_pin_to_new_node(node->output_pins[i], partial_products[0][0], 0);

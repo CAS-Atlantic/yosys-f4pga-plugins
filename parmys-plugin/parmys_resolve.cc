@@ -31,6 +31,8 @@
 
 #include "vtr_util.h"
 
+USING_YOSYS_NAMESPACE
+
 void dfs_resolve(nnode_t *node, uintptr_t traverse_mark_number, netlist_t *netlist);
 
 void resolve_node(nnode_t *node, short traverse_mark_number, netlist_t *netlist);

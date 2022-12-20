@@ -1444,7 +1444,8 @@ void equalize_ports_size(nnode_t *&node, uintptr_t traverse_mark_number, netlist
 
 void remove_fanout_pins_from_net(nnet_t *net, npin_t * /*pin*/, int id)
 {
-    for (int i = id; i < net->num_fanout_pins - 1; i++) {
+    int i;
+    for (i = id; i < net->num_fanout_pins - 1; i++) {
         net->fanout_pins[i] = net->fanout_pins[i + 1];
         if (net->fanout_pins[i] != NULL)
             net->fanout_pins[i]->pin_net_idx = i;
