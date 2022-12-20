@@ -26,8 +26,8 @@ Wire *to_wire(std::string wire_name, Module *module);
 std::pair<RTLIL::IdString, int> wideports_split(std::string name);
 const std::string str(RTLIL::SigBit sig);
 const std::string str(RTLIL::IdString id);
-void handle_cell_wideports_cache(hashlib::dict<RTLIL::IdString, hashlib::dict<int, SigBit>> *cell_wideports_cache,
-                                 Design *design, Module *module, Cell *cell);
+void handle_cell_wideports_cache(hashlib::dict<RTLIL::IdString, hashlib::dict<int, SigBit>> *cell_wideports_cache, Design *design, Module *module,
+                                 Cell *cell);
 void handle_wideports_cache(hashlib::dict<RTLIL::IdString, std::pair<int, bool>> *wideports_cache, Module *module);
 
 #endif //_PARMYS_UTILS_HPP_

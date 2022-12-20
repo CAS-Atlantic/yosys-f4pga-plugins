@@ -22,8 +22,8 @@
 
 #include "netlist_utils.h"
 
-#include "block_memory.h"
 #include "adder.h"
+#include "block_memory.h"
 #include "memory.h"
 #include "multiplier.h"
 #include "parmys_resolve.hpp"

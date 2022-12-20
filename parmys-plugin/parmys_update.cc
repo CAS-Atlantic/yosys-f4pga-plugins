@@ -36,8 +36,7 @@
 USING_YOSYS_NAMESPACE
 
 static void depth_first_traversal_to_design(short marker_value, Module *module, netlist_t *netlist, Design *design);
-static void depth_traverse_update_design(nnode_t *node, uintptr_t traverse_mark_number, Module *module, netlist_t *netlist,
-                                         Design *design);
+static void depth_traverse_update_design(nnode_t *node, uintptr_t traverse_mark_number, Module *module, netlist_t *netlist, Design *design);
 static void cell_node(nnode_t *node, short /*traverse_number*/, Module *module, netlist_t *netlist, Design *design);
 
 Wire *wire_net_driver(Module *module, nnode_t *node, nnet_t *net, long driver_idx)

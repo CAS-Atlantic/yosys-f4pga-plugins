@@ -35,9 +35,9 @@
 
 #include "parmys_resolve.hpp"
 
-#include "block_memory.h"
 #include "adder.h"
 #include "arch_util.h"
+#include "block_memory.h"
 #include "hard_block.h"
 #include "memory.h"
 #include "multiplier.h"
@@ -69,17 +69,17 @@ struct ParMYSPass : public Pass {
 
     static void hook_up_nets(netlist_t *odin_netlist, Hashtable *output_nets_hash)
     {
-        for (int i=0; i<odin_netlist->num_internal_nodes; i++) {
+        for (int i = 0; i < odin_netlist->num_internal_nodes; i++) {
             nnode_t *node = odin_netlist->internal_nodes[i];
             hook_up_node(node, output_nets_hash);
         }
 
-        for (int i=0; i<odin_netlist->num_ff_nodes; i++) {
+        for (int i = 0; i < odin_netlist->num_ff_nodes; i++) {
             nnode_t *node = odin_netlist->ff_nodes[i];
             hook_up_node(node, output_nets_hash);
         }
 
-        for (int i=0; i<odin_netlist->num_top_output_nodes; i++) {
+        for (int i = 0; i < odin_netlist->num_top_output_nodes; i++) {
             nnode_t *node = odin_netlist->top_output_nodes[i];
             hook_up_node(node, output_nets_hash);
         }

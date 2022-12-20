@@ -75,8 +75,7 @@ const std::string str(RTLIL::SigBit sig)
             str[i] = '?';
 
     if (sig.wire->width != 1)
-        str +=
-          stringf("[%d]", sig.wire->upto ? sig.wire->start_offset + sig.wire->width - sig.offset - 1 : sig.wire->start_offset + sig.offset);
+        str += stringf("[%d]", sig.wire->upto ? sig.wire->start_offset + sig.wire->width - sig.offset - 1 : sig.wire->start_offset + sig.offset);
 
     return str;
 }
@@ -90,8 +89,8 @@ const std::string str(RTLIL::IdString id)
     return str;
 }
 
-void handle_cell_wideports_cache(hashlib::dict<RTLIL::IdString, hashlib::dict<int, SigBit>> *cell_wideports_cache,
-                                 Design *design, Module *module, Cell *cell)
+void handle_cell_wideports_cache(hashlib::dict<RTLIL::IdString, hashlib::dict<int, SigBit>> *cell_wideports_cache, Design *design, Module *module,
+                                 Cell *cell)
 {
     RTLIL::Module *cell_mod = design->module(cell->type);
     for (auto &it : *cell_wideports_cache) {
