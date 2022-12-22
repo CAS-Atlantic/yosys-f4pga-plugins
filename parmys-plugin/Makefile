@@ -55,13 +55,12 @@ CXXFLAGS += -std=c++14 -Wall -W -Wextra \
             -Wno-deprecated-declarations \
             -Wno-unused-parameter \
 			-I${ODIN_II_DIR}/include \
-			-I${VTR_INSTALL_DIR}/include/libpugixml \
 			-I${VTR_INSTALL_DIR}/include/libarchfpga \
 			-I${VTR_INSTALL_DIR}/include/liblog \
 			-I${VTR_INSTALL_DIR}/include/libpugiutil \
+			-I${VTR_INSTALL_DIR}/include/libpugixml \
 			-I${VTR_INSTALL_DIR}/include/librtlnumber \
-			-I${VTR_INSTALL_DIR}/include/libvtrutil \
-			-I${VTR_INSTALL_DIR}/include/libvpr
+			-I${VTR_INSTALL_DIR}/include/libvtrutil
 
 LDFLAGS += -L${VTR_INSTALL_DIR}/lib \
 		   -L${VTR_INSTALL_DIR}/bin
