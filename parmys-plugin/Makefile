@@ -51,7 +51,10 @@ VTR_INSTALL_DIR ?= /usr/local
 
 include ../Makefile_plugin.common
 
-CXXFLAGS += -I${ODIN_II_DIR}/include \
+CXXFLAGS += -std=c++14 -Wall -W -Wextra \
+            -Wno-deprecated-declarations \
+            -Wno-unused-parameter \
+			-I${ODIN_II_DIR}/include \
 			-I${VTR_INSTALL_DIR}/include/libpugixml \
 			-I${VTR_INSTALL_DIR}/include/libarchfpga \
 			-I${VTR_INSTALL_DIR}/include/liblog \
@@ -59,9 +62,6 @@ CXXFLAGS += -I${ODIN_II_DIR}/include \
 			-I${VTR_INSTALL_DIR}/include/librtlnumber \
 			-I${VTR_INSTALL_DIR}/include/libvtrutil \
 			-I${VTR_INSTALL_DIR}/include/libvpr
-
-CXXSTD := c++14
-CXXFLAGS += -std=$(CXXSTD) -Os
 
 LDFLAGS += -L${VTR_INSTALL_DIR}/lib \
 		   -L${VTR_INSTALL_DIR}/bin
@@ -80,8 +80,6 @@ VERILOG_MODULES = adff2dff.v \
 				  aldffe2dff.v \
 				  vtr_primitives.v
 
-# install_modules: $(VERILOG_MODULES)
-# install -D $< $(YOSYS_PLUGINS_DIR)/parmys/$<
 install_modules:
 	$(foreach f, $(wildcard $(TECHLIBS_DIR)/*), install -D $(f) $(YOSYS_DATA_DIR)/parmys/$(notdir $(f));)
 
