@@ -16,40 +16,42 @@
 
 PLUGIN_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 
+ODIN_II_DIR=src
+
 NAME = parmys
 SOURCES = parmys.cc \
 		  parmys_arch.cc \
 		  parmys_update.cc \
 		  parmys_utils.cc \
 		  parmys_resolve.cc \
-		  src/adder.cc \
-		  src/enum_str.cc \
-		  src/mixing_optimization.cc \
-		  src/read_xml_config_file.cc \
-		  src/odin_error.cc \
-		  src/odin_util.cc \
-		  src/netlist_statistic.cc \
-		  src/netlist_utils.cc \
-		  src/netlist_cleanup.cc \
-		  src/node_utils.cc \
-		  src/multiplier.cc \
-		  src/subtractor.cc \
-		  src/hard_soft_logic_mixer.cc \
-		  src/odin_ii.cc \
-		  src/string_cache.cc \
-		  src/partial_map.cc \
-		  src/hard_block.cc \
-		  src/block_memory.cc \
-		  src/memory.cc \
-		  src/netlist_visualizer.cc \
-		  src/hash_table.cc \
-		  src/ast_util.cc
+		  ${ODIN_II_DIR}/adder.cc \
+		  ${ODIN_II_DIR}/enum_str.cc \
+		  ${ODIN_II_DIR}/mixing_optimization.cc \
+		  ${ODIN_II_DIR}/read_xml_config_file.cc \
+		  ${ODIN_II_DIR}/odin_error.cc \
+		  ${ODIN_II_DIR}/odin_util.cc \
+		  ${ODIN_II_DIR}/netlist_statistic.cc \
+		  ${ODIN_II_DIR}/netlist_utils.cc \
+		  ${ODIN_II_DIR}/netlist_cleanup.cc \
+		  ${ODIN_II_DIR}/node_utils.cc \
+		  ${ODIN_II_DIR}/multiplier.cc \
+		  ${ODIN_II_DIR}/subtractor.cc \
+		  ${ODIN_II_DIR}/hard_soft_logic_mixer.cc \
+		  ${ODIN_II_DIR}/odin_ii.cc \
+		  ${ODIN_II_DIR}/string_cache.cc \
+		  ${ODIN_II_DIR}/partial_map.cc \
+		  ${ODIN_II_DIR}/hard_block.cc \
+		  ${ODIN_II_DIR}/block_memory.cc \
+		  ${ODIN_II_DIR}/memory.cc \
+		  ${ODIN_II_DIR}/netlist_visualizer.cc \
+		  ${ODIN_II_DIR}/hash_table.cc \
+		  ${ODIN_II_DIR}/ast_util.cc
 
 VTR_INSTALL_DIR ?= /usr/local
 
 include ../Makefile_plugin.common
 
-CXXFLAGS += -I./include \
+CXXFLAGS += -I${ODIN_II_DIR}/include \
 			-I${VTR_INSTALL_DIR}/include/libpugixml \
 			-I${VTR_INSTALL_DIR}/include/libarchfpga \
 			-I${VTR_INSTALL_DIR}/include/liblog \
