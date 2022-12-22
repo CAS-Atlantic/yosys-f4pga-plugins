@@ -84,7 +84,7 @@ void mixing_optimization_stats(nnode_t *node, netlist_t *netlist)
 static void print_stats(metric_t *m)
 {
     log("\n\t%s:%0.4lf\n\t%s: %0.4lf\n\t%s: %0.4lf\n\t%s: %0.4lf\n", "shortest path", m->min_depth, "critical path", m->max_depth, "average path",
-           m->avg_depth, "overall fan-out", m->avg_width);
+        m->avg_depth, "overall fan-out", m->avg_width);
 }
 _static_unused(print_stats) // quiet warning
 
